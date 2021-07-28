@@ -20,3 +20,22 @@ function InitFilesRanksBoard() {
     }
 
 }
+
+function InitHashKeys() {
+    let index = 0;
+
+    for (index = 0; index < 14 * 120; index++) {
+        PieceKeys[index] = rand_32();
+    }
+
+    SideKey = rand_32();
+
+    for (index = 0; index < 16; index++) {
+        CastleKeys[index] = rand_32();
+    }
+}
+
+function init() {
+    InitFilesRanksBoard();
+    InitHashKeys();
+}
