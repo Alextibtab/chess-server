@@ -1,0 +1,22 @@
+{
+  "name": "chess-server",
+  "version": "1.0.0",
+  "description": "Chess Server for ComputerCraft Lua Client",
+  "main": "/src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alextibtab/chess-server.git"
+  },
+  "keywords": [
+    "chess"
+  ],
+  "author": "Alex C",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alextibtab/chess-server/issues"
+  },
+  "homepage": "https://github.com/Alextibtab/chess-server#readme"
+}
