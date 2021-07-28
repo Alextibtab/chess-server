@@ -16,12 +16,18 @@ const wss = new Server({ server })
 wss.on("connection", ws => {
     console.log("New client connected!");
 
-    ws.send("Chess Game Started");
-    ws.on("message", function incoming(message) {
-        console.log('Move: %s received',message);
-    });
+    let chessGame = {
+        "playing": true
+    };
+    
+    while (chessGame.playing) {
+        ws.send("Chess Game Started");
+        ws.on("message", function incoming(message) {
+            console.log('Move: %s received',message);
+        });
 
-    ws.on("close", () => {
-        console.log("Client has disconnected");
-    });
+        ws.on("close", () => {
+            console.log("Client has disconnected");
+        });
+    }
 });

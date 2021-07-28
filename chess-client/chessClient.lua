@@ -506,9 +506,9 @@ function websocketLoop()
             if message == nil then
                 break
             end
-            print("\n", message)
-            print("\n\nSend Move: ")
-            local input = read("*")
+            print(message)
+            print("\n\nSend Move: \n")
+            local input = read()
             ws.send(input)
         end
     end
