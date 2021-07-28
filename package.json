@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Alextibtab/chess-server/issues"
   },
-  "homepage": "https://github.com/Alextibtab/chess-server#readme"
+  "homepage": "https://github.com/Alextibtab/chess-server#readme",
+  "dependencies": {
+    "ws": "^7.5.3"
+  }
 }
