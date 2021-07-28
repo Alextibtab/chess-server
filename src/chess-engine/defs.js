@@ -10,6 +10,9 @@ const SQUARES = {
     NO_SQ:99, OFFBOARD:100
 };
 
+let MAXGAMEMOVES = 2048;
+let MAXPOSITIONMOVES = 256;
+let MAXDEPTH = 64;
 
 let FilesBoard = new Array(BOARD_SQUARES);
 let RanksBoard = new Array(BOARD_SQUARES);
@@ -37,7 +40,18 @@ let PieceKeys = new Array(14 * 120);
 let SideKey;
 let CastleKeys = new Array(16);
 
+let Square120ToSquare64 = new Array(BOARD_SQUARES);
+let Square64ToSquare120 = new Array(64);
+
 function rand_32() {
     return (Math.floor((Math.random()*255)+1) << 23) | (Math.floor((Math.random()*255)+1) << 16)
         | (Math.floor(Math.random()*255)+1) << 8 | Math.floor((Math.random()*255)+1)
+}
+
+function square64(square120) {
+    return Square120ToSquare64[(square120)];
+}
+
+function square120(square64) {
+    return Square64ToSquare120[(square64)];
 }

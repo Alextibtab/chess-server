@@ -35,6 +35,31 @@ function InitHashKeys() {
     }
 }
 
+function InitSquare120To64() {
+    let index = 0;
+    let file = FILES.FILE_A;
+    let rank = RANKS.RANK_1;
+    let square = SQUARES.A1;
+    let square64 = 0;
+
+    for (index = 0; index < BOARD_SQUARES; index++) {
+        Square120ToSquare64[index] = 65;
+    }
+
+    for (index = 0; index < 64; index++) {
+        Square64ToSquare120[index] = 120;
+    }
+
+    for (rank = RANKS.RANK_1; rank <= RANKS.RANK_8; rank++) {
+        for (file = FILES.FILE_A; file <= FILES.FILE_H; file++) {
+            square = FileRankToSquare(file, rank);
+            Square64ToSquare120[square64] = square;
+            Square120ToSquare64[square] = square64;
+            square64++;
+        }
+    }
+}
+
 function init() {
     InitFilesRanksBoard();
     InitHashKeys();
