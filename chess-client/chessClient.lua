@@ -1,8 +1,8 @@
 -- Chess Game (Let's see how far I get) --
-
+ 
 -- JSON library in Lua
 -- Credit: https://github.com/actboy168/
-
+ 
 local type = type
 local next = next
 local error = error
@@ -23,18 +23,18 @@ local setmetatable = setmetatable
 local getmetatable = getmetatable
 local huge = math.huge
 local tiny = -huge
-
+ 
 local json = {}
 json.object = {}
-
+ 
 json.supportSparseArray = true
-
+ 
 -- json.encode --
 local statusVisited
 local statusBuilder
-
+ 
 local encode_map = {}
-
+ 
 local encode_escape_map = {
     [ "\"" ] = "\\\"",
     [ "\\" ] = "\\\\",
@@ -45,40 +45,40 @@ local encode_escape_map = {
     [ "\r" ] = "\\r",
     [ "\t" ] = "\\t",
 }
-
+ 
 local decode_escape_set = {}
 local decode_escape_map = {}
 for k, v in next, encode_escape_map do
     decode_escape_map[v] = k
     decode_escape_set[string_byte(v, 2)] = true
 end
-
+ 
 for i = 0, 31 do
     local c = string_char(i)
     if not encode_escape_map[c] then
         encode_escape_map[c] = string_format("\\u%04x", i)
     end
 end
-
+ 
 local function encode(v)
     local res = encode_map[type(v)](v)
     statusBuilder[#statusBuilder+1] = res
 end
-
+ 
 encode_map["nil"] = function ()
     return "null"
 end
-
+ 
 local function encode_string(v)
     return string_gsub(v, '[\0-\31\\"]', encode_escape_map)
 end
-
+ 
 function encode_map.string(v)
     statusBuilder[#statusBuilder+1] = '"'
     statusBuilder[#statusBuilder+1] = encode_string(v)
     return '"'
 end
-
+ 
 local function convertreal(v)
     local g = string_format('%.16g', v)
     if tonumber(g) == v then
@@ -86,14 +86,14 @@ local function convertreal(v)
     end
     return string_format('%.17g', v)
 end
-
+ 
 if string_match(tostring(1/2), "%p") == "," then
     local _convertreal = convertreal
     function convertreal(v)
         return string_gsub(_convertreal(v), ',', '.')
     end
 end
-
+ 
 function encode_map.number(v)
     if v ~= v or v <= tiny or v >= huge then
         error("unexpected number value '" .. tostring(v) .. "'")
@@ -103,7 +103,7 @@ function encode_map.number(v)
     end
     return convertreal(v)
 end
-
+ 
 function encode_map.boolean(v)
     if v then
         return "true"
@@ -111,7 +111,7 @@ function encode_map.boolean(v)
         return "false"
     end
 end
-
+ 
 function encode_map.table(t)
     local first_val = next(t)
     if first_val == nil then
@@ -173,7 +173,7 @@ function encode_map.table(t)
         return "]"
     end
 end
-
+ 
 local function encode_unexpected(v)
     if v == json.null then
         return "null"
@@ -184,25 +184,25 @@ end
 encode_map[ "function" ] = encode_unexpected
 encode_map[ "userdata" ] = encode_unexpected
 encode_map[ "thread"   ] = encode_unexpected
-
+ 
 function json.encode(v)
     statusVisited = {}
     statusBuilder = {}
     encode(v)
     return table_concat(statusBuilder)
 end
-
+ 
 json._encode_map = encode_map
 json._encode_string = encode_string
-
+ 
 -- json.decode --
-
+ 
 local statusBuf
 local statusPos
 local statusTop
 local statusAry = {}
 local statusRef = {}
-
+ 
 local function find_line()
     local line = 1
     local pos = 1
@@ -219,15 +219,15 @@ local function find_line()
         line = line + 1
     end
 end
-
+ 
 local function decode_error(msg)
     error(string_format("ERROR: %s at line %d col %d", msg, find_line()))
 end
-
+ 
 local function get_word()
     return string_match(statusBuf, "^[^ \t\r\n%]},]*", statusPos)
 end
-
+ 
 local function next_byte()
     local pos = string_find(statusBuf, "[^ \t\r\n]", statusPos)
     if pos then
@@ -236,7 +236,7 @@ local function next_byte()
     end
     return -1
 end
-
+ 
 local function consume_byte(c)
     local _, pos = string_find(statusBuf, c, statusPos)
     if pos then
@@ -244,7 +244,7 @@ local function consume_byte(c)
         return true
     end
 end
-
+ 
 local function expect_byte(c)
     local _, pos = string_find(statusBuf, c, statusPos)
     if not pos then
@@ -252,15 +252,15 @@ local function expect_byte(c)
     end
     statusPos = pos
 end
-
+ 
 local function decode_unicode_surrogate(s1, s2)
     return utf8_char(0x10000 + (tonumber(s1, 16) - 0xd800) * 0x400 + (tonumber(s2, 16) - 0xdc00))
 end
-
+ 
 local function decode_unicode_escape(s)
     return utf8_char(tonumber(s, 16))
 end
-
+ 
 local function decode_string()
     local has_unicode_escape = false
     local has_escape = false
@@ -307,7 +307,7 @@ local function decode_string()
         end
     end
 end
-
+ 
 local function decode_number()
     local num, c = string_match(statusBuf, '^([0-9]+%.?[0-9]*)([eE]?)', statusPos)
     if not num or string_byte(num, -1) == 0x2E --[[ "." ]] then
@@ -322,7 +322,7 @@ local function decode_number()
     statusPos = statusPos + #num
     return tonumber(num)
 end
-
+ 
 local function decode_number_zero()
     local num, c = string_match(statusBuf, '^(.%.?[0-9]*)([eE]?)', statusPos)
     if not num or string_byte(num, -1) == 0x2E --[[ "." ]] or string_match(statusBuf, '^.[0-9]+', statusPos) then
@@ -337,7 +337,7 @@ local function decode_number_zero()
     statusPos = statusPos + #num
     return tonumber(num)
 end
-
+ 
 local function decode_number_negative()
     statusPos = statusPos + 1
     local c = string_byte(statusBuf, statusPos)
@@ -350,7 +350,7 @@ local function decode_number_negative()
     end
     decode_error("invalid number '" .. get_word() .. "'")
 end
-
+ 
 local function decode_true()
     if string_sub(statusBuf, statusPos, statusPos+3) ~= "true" then
         decode_error("invalid literal '" .. get_word() .. "'")
@@ -358,7 +358,7 @@ local function decode_true()
     statusPos = statusPos + 4
     return true
 end
-
+ 
 local function decode_false()
     if string_sub(statusBuf, statusPos, statusPos+4) ~= "false" then
         decode_error("invalid literal '" .. get_word() .. "'")
@@ -366,7 +366,7 @@ local function decode_false()
     statusPos = statusPos + 5
     return false
 end
-
+ 
 local function decode_null()
     if string_sub(statusBuf, statusPos, statusPos+3) ~= "null" then
         decode_error("invalid literal '" .. get_word() .. "'")
@@ -374,7 +374,7 @@ local function decode_null()
     statusPos = statusPos + 4
     return json.null
 end
-
+ 
 local function decode_array()
     statusPos = statusPos + 1
     local res = {}
@@ -386,7 +386,7 @@ local function decode_array()
     statusRef[statusTop] = res
     return res
 end
-
+ 
 local function decode_object()
     statusPos = statusPos + 1
     local res = {}
@@ -398,7 +398,7 @@ local function decode_object()
     statusRef[statusTop] = res
     return res
 end
-
+ 
 local decode_uncompleted_map = {
     [ string_byte '"' ] = decode_string,
     [ string_byte "0" ] = decode_number_zero,
@@ -424,17 +424,17 @@ end
 local function unexpected_eol()
     decode_error("unexpected character '<eol>'")
 end
-
+ 
 local decode_map = {}
 for i = 0, 255 do
     decode_map[i] = decode_uncompleted_map[i] or unexpected_character
 end
 decode_map[-1] = unexpected_eol
-
+ 
 local function decode()
     return decode_map[next_byte()]()
 end
-
+ 
 local function decode_item()
     local top = statusTop
     local ref = statusRef[top]
@@ -462,7 +462,7 @@ local function decode_item()
         until statusTop == 0
     end
 end
-
+ 
 function json.decode(str)
     if type(str) ~= "string" then
         error("expected argument of type string, got " .. type(str))
@@ -479,35 +479,46 @@ function json.decode(str)
     end
     return res
 end
-
+ 
 -- Generate a lightuserdata
 json.null = debug.upvalueid(decode, 1)
-
-
+ 
+ 
 -- Websocket Setup
-function websocketloop()
-
+function websocketLoop()
+ 
     local ws, err = http.websocket("ws://computercraft-chess.herokuapp.com")
-
+    local monitor = peripheral.find("monitor")
+    monitor.setTextScale(0.5)
+    local width, height = monitor.getSize()
     if err then
         print(err)
     elseif ws then
         while true do
             term.clear()
             term.setCursorPos(1,1)
+            monitor.clear()
+            monitor.setCursorPos(1,1)
+            print("Chess Client Lua - V0.01")
+            print("\nDEBUG STATS\n-----------")
+            print("Monitor width: ", width, "\nheight: ", height)
             local message = ws.receive()
             if message == nil then
                 break
             end
+            print("\n", message)
+            print("\n\nSend Move: ")
+            local input = read("*")
+            ws.send(input)
         end
     end
     if ws then
         ws.close()
     end
 end
-
+ 
 while true do
-    local status, res = pcall(websocketloop())
+    local status, res = pcall(websocketLoop)
     term.clear()
     term.setCursorPos(1,1)
 end
