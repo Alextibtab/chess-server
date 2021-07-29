@@ -107,7 +107,7 @@ function UpdateListsMaterial() {
 
             GameBoard.material[colour] += PieceVal[piece];
 
-            GameBoard.pieceListp[pieceIndex(piece, GameBoard.pieceNumber[piece])] = square;
+            GameBoard.pieceList[pieceIndex(piece, GameBoard.pieceNumber[piece])] = square;
             GameBoard.pieceNumber[piece]++;
         }
     }
