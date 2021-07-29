@@ -20,6 +20,39 @@ GameBoard.moveList = new Array(MAXDEPTH * MAXPOSITIONMOVES);
 GameBoard.moveScores = new Array(MAXDEPTH * MAXPOSITIONMOVES);
 GameBoard.moveListStart = new Array(MAXDEPTH);
 
+function PrintBoard() {
+    let square, file, rank, piece;
+
+    console.log("\nGame Board:\n");
+    for (rank = RANKS.RANK_8; rank >= RANKS.RANK_1; rank--) {
+        let line = (RankChar[rank] + " ");
+        for (file = FILES.FILE_A; file <= FILES.FILE_H; file++) {
+            square = FileRankToSquare(file, rank);
+            piece = GameBoard.pieces[square];
+            line += (" " + PieceChar[piece] + " ");
+        }
+        console.log(line);
+    }
+
+    let line = "  ";
+    for (file = FILES.FILE_A; file <= FILES.FILE_H; file++) {
+        line += (" " + FileChar[file] + " ");
+    }
+
+    console.log(line);
+    console.log("side: " + SideChar[GameBoard.side]);
+    console.log("enPas: " + GameBoard.enPas);
+    line = "";
+
+    if (GameBoard.castlePerm & CASTLEBIT.WKCA) line += 'K';
+    if (GameBoard.castlePerm & CASTLEBIT.WQCA) line += 'Q';
+    if (GameBoard.castlePerm & CASTLEBIT.BKCA) line += 'k';
+    if (GameBoard.castlePerm & CASTLEBIT.BQCA) line += 'q';
+
+    console.log("castle: " + line);
+    console.log("Key: " + GameBoard.posKey.toString(16));
+}
+
 function GeneratePosKey() {
     let square = 0;
     let finalKey = 0;

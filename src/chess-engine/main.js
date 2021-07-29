@@ -63,4 +63,5 @@ function InitSquare120To64() {
 function init() {
     InitFilesRanksBoard();
     InitHashKeys();
+    InitSquare120To64();
 }

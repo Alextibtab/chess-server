@@ -17,6 +17,13 @@ let MAXDEPTH = 64;
 let FilesBoard = new Array(BOARD_SQUARES);
 let RanksBoard = new Array(BOARD_SQUARES);
 
+const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+let PieceChar = ".PNBRQKpnbrqk";
+let SideChar = "wb-";
+let RankChar = "12345678";
+let FileChar = "abcdefgh";
+
 // Get the square for a file and rank on the board
 function FileRankToSquare(file, rank) {
     return((21 + file) + (rank * 10));
