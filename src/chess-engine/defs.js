@@ -62,3 +62,7 @@ function square64(square120) {
 function square120(square64) {
     return Square64ToSquare120[(square64)];
 }
+
+function pieceIndex(piece, pieceNumber) {
+    return (piece * 10 + pieceNumber);
+}

@@ -1,7 +1,3 @@
-function PieceIndex(piece, pieceNumber) {
-    return (piece * 10 + pieceNumber);
-}
-
 let GameBoard = {};
 
 GameBoard.pieces = new Array(BOARD_SQUARES);
@@ -78,15 +74,18 @@ function GeneratePosKey() {
     return finalKey;
 }
 
-function ResetBoard() {
-    let index = 0;
-    for (index = 0; index < BOARD_SQUARES; index++) {
-        GameBoard.pieces[index] = SQUARES.OFFBOARD;
-    }
+function PrintPieceLists() {
+    let piece, pieceNumber;
 
-    for (index = 0; index < 64; index++) {
-        GameBoard.pieces[square120(index)] = PIECES.EMPTY;
+    for (piece = PIECES.wP; piece <= PIECES.bK; piece++) {
+        for (pieceNumber = 0; pieceNumber < GameBoard.pieceNumber[piece]; pieceNumber++) {
+            console.log("Piece: " + PieceChar[piece] + ' on ' + printSquare(GameBoard.pieceList[pieceIndex(piece, pieceNumber)]));
+        }
     }
+}
+
+function UpdateListsMaterial() {
+    let piece, square, index, colour;
 
     for (index = 0; index < 14 * 120; index++) {
         GameBoard.pieceList[index] = PIECES.EMPTY;
@@ -98,6 +97,30 @@ function ResetBoard() {
 
     for (index = 0; index < 13; index++) {
         GameBoard.pieceNumber[index] = 0;
+    }
+
+    for (index = 0; index < 64; index++) {
+        square = square120(index);
+        piece = GameBoard.pieces[square];
+        if (piece != PIECES.EMPTY) {
+            colour = PieceCol[piece];
+
+            GameBoard.material[colour] += PieceVal[piece];
+
+            GameBoard.pieceListp[pieceIndex(piece, GameBoard.pieceNumber[piece])] = square;
+            GameBoard.pieceNumber[piece]++;
+        }
+    }
+}
+
+function ResetBoard() {
+    let index = 0;
+    for (index = 0; index < BOARD_SQUARES; index++) {
+        GameBoard.pieces[index] = SQUARES.OFFBOARD;
+    }
+
+    for (index = 0; index < 64; index++) {
+        GameBoard.pieces[square120(index)] = PIECES.EMPTY;
     }
 
     GameBoard.side = COLOURS.BOTH;
@@ -197,4 +220,5 @@ function ParseFen(fen) {
     }
 
     GameBoard.posKey = GeneratePosKey();
+    UpdateListsMaterial();
 }
