@@ -43,6 +43,11 @@ let PieceRookQueen = [ false, false, false, false, true, true, false, false, fal
 let PieceBishopQueen = [ false, false, false, true, false, true, false, false, false, true, false, true, false ];
 let PieceSlides = [ false, false, false, true, true, true, false, false, false, true, true, true, false ];
 
+let KnightDirection = [ -8, -19, -21, -12, 8, 19, 21, 12 ];
+let RookDirection = [ -1, -10, 1, 10];
+let BishopDirection = [ -9, -11, 11, 9 ];
+let KingDirection = [ -1, -10, 1, 10, -9, -11, 11, 9 ];
+
 let PieceKeys = new Array(14 * 120);
 let SideKey;
 let CastleKeys = new Array(16);

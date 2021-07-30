@@ -111,6 +111,8 @@ function UpdateListsMaterial() {
             GameBoard.pieceNumber[piece]++;
         }
     }
+
+    PrintPieceLists()
 }
 
 function ResetBoard() {
@@ -221,4 +223,69 @@ function ParseFen(fen) {
 
     GameBoard.posKey = GeneratePosKey();
     UpdateListsMaterial();
+}
+
+function SquareAttacked(square, side) {
+    let piece;
+    let t_square;
+    let index;
+
+    if (side == COLOURS.WHITE) {
+        if (GameBoard.pieces[square - 11] == PIECES.wP || GameBoard.pieces[square - 9] == PIECES.wP) {
+            return true;
+        }
+
+    } else {
+        if (GameBoard.pieces[square + 11] == PIECES.bP || GameBoard.pieces[square + 9] == PIECES.bP) {
+            return true;
+        }
+    }
+
+    for (index = 0; index < 8; index++) {
+        piece = GameBoard.pieces[square + KnightDirection[index]];
+        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side ** PieceKnight[piece] == true) {
+            return true;
+        }
+    }
+
+    for (index = 0; index < 4; index++) {
+        direction = RookDirection[index];
+        t_square = square + direction;
+        piece = GameBoard.pieces[t_square];
+        while (piece != SQUARES.OFFBOARD) {
+            if (piece != PIECES.EMPTY) {
+                if (PieceRookQueen[piece] == true && PieceCol[piece] == side) {
+                    return true;
+                }
+                break;
+            }
+            t_square += direction;
+            piece = GameBoard.pieces[t_square];
+        }
+    }
+
+    for (index = 0; index < 4; index++) {
+        direction = BishopDirection[index];
+        t_square = square + direction;
+        piece = GameBoard.pieces[t_square];
+        while (piece != SQUARES.OFFBOARD) {
+            if (piece != PIECES.EMPTY) {
+                if (PieceBishopQueen[piece] == true && PieceCol[piece] == side) {
+                    return true;
+                }
+                break;
+            }
+            t_square += direction;
+            piece = GameBoard.pieces[t_square];
+        }
+    }
+
+    for (index = 0; index < 8; index++) {
+        piece = GameBoard.pieces[square + KingDirection[index]];
+        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side ** PieceKing[piece] == true) {
+            return true;
+        }
+    }
+
+    return false;
 }
