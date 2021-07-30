@@ -235,7 +235,7 @@ function PrintSquareAttacked() {
         let line = ((rank+1) + " ");
         for (file = FILES.FILE_A; file <= FILES.FILE_H; file++) {
             square = FileRankToSquare(file, rank);
-            if (SquareAttacked(square, GameBoard.side) == true) piece = "X";
+            if (SquareAttacked(square, GameBoard.side)) piece = "X";
             else piece = "-";
             line += (" " + piece + " "); 
         }
@@ -262,7 +262,7 @@ function SquareAttacked(square, side) {
 
     for (index = 0; index < 8; index++) {
         piece = GameBoard.pieces[square + KnightDirection[index]];
-        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side && PieceKnight[piece] == true) {
+        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side && PieceKnight[piece]) {
             return true;
         }
     }
@@ -273,7 +273,7 @@ function SquareAttacked(square, side) {
         piece = GameBoard.pieces[t_square];
         while (piece != SQUARES.OFFBOARD) {
             if (piece != PIECES.EMPTY) {
-                if (PieceRookQueen[piece] == true && PieceCol[piece] == side) {
+                if (PieceRookQueen[piece] && PieceCol[piece] == side) {
                     return true;
                 }
                 break;
@@ -289,7 +289,7 @@ function SquareAttacked(square, side) {
         piece = GameBoard.pieces[t_square];
         while (piece != SQUARES.OFFBOARD) {
             if (piece != PIECES.EMPTY) {
-                if (PieceBishopQueen[piece] == true && PieceCol[piece] == side) {
+                if (PieceBishopQueen[piece] && PieceCol[piece] == side) {
                     return true;
                 }
                 break;
@@ -301,7 +301,7 @@ function SquareAttacked(square, side) {
 
     for (index = 0; index < 8; index++) {
         piece = GameBoard.pieces[square + KingDirection[index]];
-        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side && PieceKing[piece] == true) {
+        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side && PieceKing[piece]) {
             return true;
         }
     }
