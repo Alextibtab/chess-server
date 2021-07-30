@@ -71,3 +71,17 @@ function square120(square64) {
 function pieceIndex(piece, pieceNumber) {
     return (piece * 10 + pieceNumber);
 }
+
+function fromSquare(move) { return (move & 0x7F); }
+function toSquare(move) { return ((move >> 7) & 0x7F); }
+function captured(move) { return ((move >> 14) & 0xF); }
+function promoted(move) { return ((move >> 20) & 0xF); }
+
+let MFLAGEP = 0x40000;
+let MFLAGPS = 0x80000;
+let MFLAGCA = 0x1000000;
+
+let MFLAGCAP = 0x7C000;
+let MFLAGPROM = 0xF00000;
+
+let NOMOVE = 0;
