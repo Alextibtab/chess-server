@@ -223,6 +223,25 @@ function ParseFen(fen) {
 
     GameBoard.posKey = GeneratePosKey();
     UpdateListsMaterial();
+    PrintSquareAttacked();
+    PrintBoard();
+}
+
+function PrintSquareAttacked() {
+    let square, file, rank, piece;
+    console.log("\nAttacked:\n");
+
+    for (rank = RANKS.RANK_8; rank >= RANKS.RANK_1; rank--) {
+        let line = ((rank+1) + " ");
+        for (file = FILES.FILE_A; file <= FILES.FILE_H; file++) {
+            square = FileRankToSquare(file, rank);
+            if (SquareAttacked(square, GameBoard.side) == true) piece = "X";
+            else piece = "-";
+            line += (" " + piece + " "); 
+        }
+        console.log(line);
+    }
+    console.log("");
 }
 
 function SquareAttacked(square, side) {
@@ -243,7 +262,7 @@ function SquareAttacked(square, side) {
 
     for (index = 0; index < 8; index++) {
         piece = GameBoard.pieces[square + KnightDirection[index]];
-        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side ** PieceKnight[piece] == true) {
+        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side && PieceKnight[piece] == true) {
             return true;
         }
     }
@@ -282,7 +301,7 @@ function SquareAttacked(square, side) {
 
     for (index = 0; index < 8; index++) {
         piece = GameBoard.pieces[square + KingDirection[index]];
-        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side ** PieceKing[piece] == true) {
+        if (piece != SQUARES.OFFBOARD && PieceCol[piece] == side && PieceKing[piece] == true) {
             return true;
         }
     }
